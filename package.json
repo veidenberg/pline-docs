@@ -1,0 +1,23 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "Pline documentation",
+  "homepage": "http://wasabiapp.org/pline",
+  "bugs": {
+    "url": "https://github.com/veidenbe/pline/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/veidenbe/pline.git"
+  },
+  "author": "Andres Veidenberg",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "vuepress build --no-cache --dest dist",
+    "dev": "vuepress dev --no-cache --no-clear-screen --open"
+  },
+  "devDependencies": {
+    "vuepress": "^1.2.0"
+  }
+}
