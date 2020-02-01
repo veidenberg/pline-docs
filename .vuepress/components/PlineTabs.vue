@@ -1,9 +1,9 @@
 <template>
 <div class="plugin-demo">
     <div class="plugin-header">
-        <h3 class="plugin-name">⚙️ {{ json.name || '' }} </h3>
-        <p class="plugin-desc"> {{ desc || '' }} </p>
-        <a :if="json.url" :href="json.url"> {{ json.url }} <OutboundLink/></a>
+        <h3 class="plugin-name">⚙️ {{ info.name }} </h3>
+        <p class="plugin-desc"> {{ desc }} </p>
+        <a v-if="info.url" :href="info.url"> {{ info.url }} <OutboundLink/></a>
     </div>
     <nav-link class="action-button" :item="{text:'📄 JSON', link:'/'}" />
     <nav-link class="action-button" :item="{text:'⚙️ Plugin', link:'/'}" />
@@ -30,6 +30,7 @@ import NavLink from '@theme/components/NavLink.vue';
 
 export default {
   name: 'PlineTabs',
+  components: { Tab, Code, NavLink },
   props: {
     name: {
       type: String,
@@ -43,22 +44,19 @@ export default {
   data: function(){
     return {
       activeTab : 0,
-      json: { name: this.name },
-      plugin: false,
-      timeout: this.index*1000
+      info: { name: this.name, url: '', desc: '' },
+      timeout: this.index*1000,
+      jsonStr: ''
     }
   },
   computed: {
     desc: function(){
-        if(!this.json.desc) return '';
-        return this.json.desc.charAt(0).toUpperCase() + this.json.desc.substring(1);
-    },
-    jsonStr: function(){
-        return JSON.stringify(this.json, null, 2);
+        var d = this.info.desc || this.info.description;
+        if(!d) return '';
+        return d.charAt(0).toUpperCase() + d.substring(1);
     }
   },
-  components: { Tab, Code, NavLink },
-  mounted: function() { //add highlighted json code dynamically
+  mounted: function() { //dynamically add highlighted json code
     const self = this;
     const UItab = self.$refs.gui.$el; //tab with interface
     const fpath = self.name.includes('.')? self.name : self.name+'/plugin.json';
@@ -67,20 +65,26 @@ export default {
       $.get('/pline/plugins/'+fpath)
       .done(function(json){
         UItab.innerText = '';
+        Object.assign(self.info, json);
+        self.jsonStr = JSON.stringify(json, null, 2);
         if(json.pipeline){
             Pline.openPipeline(json, UItab);
         } else {
-            self.plugin = Pline.addPlugin(json);
-            self.plugin.draw(UItab);
+            Pline.addPlugin(json).draw(UItab);
         }
-        self.json = json;
       })
-      .fail(function(obj){ //obj string
+      .fail(function(resp){ //obj string
         UItab.innerText = '';
-        self.plugin = Pline.addPlugin(obj.responseText);
-        self.plugin.draw(UItab);
-        self.json = self.plugin.json;
+        try {
+            var obj = Function('"use strict"; return ('+ resp.responseText +')')();
+            Object.assign(self.info, obj);
+            self.jsonStr = resp.responseText;
+            Pline.addPlugin(obj).draw(UItab);
+        } catch(e) {
+            UItab.innerText = 'JSON parsing error: '+e;
+        }
       }).always(function(){
+        delete self.info.options;
         setTimeout( function(){
             if(UItab.children.length){
                 var jsontab = UItab.nextElementSibling;
