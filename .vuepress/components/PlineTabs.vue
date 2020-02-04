@@ -3,11 +3,11 @@
     <div class="plugin-header">
         <h3 class="plugin-name">⚙️ {{ info.name }} </h3>
         <p class="plugin-desc"> {{ desc }} </p>
-        <a v-if="info.url" :href="info.url"> {{ info.url }} <OutboundLink/></a>
+        <a v-if="info.url" :href="info.url"> {{ info.url }} <OutboundLink v-if="info.url"/></a>
     </div>
-    <nav-link class="action-button" :item="{text:'📄 JSON', link:'/'}" />
-    <nav-link class="action-button" :item="{text:'⚙️ Plugin', link:'/'}" />
-    <nav-link class="action-button" :item="{text:'📦 Bundle', link:'/'}" />
+    <btn :text="'📄 JSON'" :link="json_url" download/>
+    <btn v-if="!pipeline" :text="'Plugin'" :icon="os" v-on:click="$parent.makeZip('plugin', name)"/>
+    <btn :text="'Bundle'" :icon="os" v-on:click="$parent.makeZip('bundle', name)"/>
     <div class="tabs">
         <div class="tabs-header">
             <span class="title" @click="activeTab = 0" :class="{active: activeTab === 0}"> Interface </span>
@@ -26,11 +26,11 @@
 <script>
 import Tab from './Tab';
 import Code from './Code';
-import NavLink from '@theme/components/NavLink.vue';
+import Btn from './Btn';
 
 export default {
   name: 'PlineTabs',
-  components: { Tab, Code, NavLink },
+  components: { Tab, Code, Btn },
   props: {
     name: {
       type: String,
@@ -39,6 +39,11 @@ export default {
     index: {
         type: Number,
         default: 0
+    },
+    pipeline: Boolean,
+    os: {
+        type: String,
+        default: 'osx'
     }
   },
   data: function(){
@@ -54,16 +59,21 @@ export default {
         var d = this.info.desc || this.info.description;
         if(!d) return '';
         return d.charAt(0).toUpperCase() + d.substring(1);
+    },
+    json_url: function(){
+        const root = 'https://github.com/veidenberg/pline-plugins/raw/master/';
+        if(this.pipeline) return root + 'pipelines/'+this.name+'/'+this.name+'.json';
+        return root + this.name+'/plugin.json';
     }
   },
   mounted: function() { //dynamically add highlighted json code
     const self = this;
     const UItab = self.$refs.gui.$el; //tab with interface
-    const fpath = self.name.includes('.')? self.name : self.name+'/plugin.json';
     
     setTimeout( function(){ //json
-      $.get('/pline/plugins/'+fpath)
+      $.get(self.json_url)
       .done(function(json){
+          console.log(json);
         UItab.innerText = '';
         Object.assign(self.info, json);
         self.jsonStr = JSON.stringify(json, null, 2);
@@ -74,6 +84,7 @@ export default {
         }
       })
       .fail(function(resp){ //obj string
+      console.log(resp.responseText);
         UItab.innerText = '';
         try {
             var obj = Function('"use strict"; return ('+ resp.responseText +')')();

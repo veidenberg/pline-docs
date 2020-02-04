@@ -14,7 +14,7 @@ module.exports = {
         nav: [
           {text: '🏠 Home', link: '/'},
           {text: '📖 Docs', link: '/guide/'},
-          {text: '📦 Download', link: '/downloads/'},
+          {text: '📦 Downloads', link: '/downloads/'},
           {text: 'GitHub', link: 'https://github.com/veidenberg/pline'}
         ],
         sidebar: {

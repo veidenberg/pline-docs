@@ -8,14 +8,14 @@ sidebar: false
   <div class="logo away">
     <img :src="$withBase('/images/scrn_man.jpg')">
     <img :src="$withBase('/images/scrn_pline_json.jpg')">
-    <img :src="$withBase('/images/scrn_pline_ui.png')">
+    <div class="logoUI"></div>
   </div>
   <h1 id="main-title">Pline</h1>
   <p class="description">JSON-based web interfaces for command-line programs</p>
   <p class="action">
-	  <nav-link class="action-button" :item="{text:'▶️ Play video', link:'/'}" />
-    <nav-link class="action-button" :item="{text:'Live demo →', link:'http://wasabiapp.org:8080'}" />
-    <nav-link class="action-button" :item="{text:'Get started →', link:'/guide/'}" />
+	  <btn text="Play video" icon="play" link="/" />
+    <btn text="Live demo →" link="http://wasabiapp.org:8080" />
+    <btn text="Guide →" link="/guide/" />
   </p>
 </div>
 
@@ -30,7 +30,7 @@ sidebar: false
 
 ### Given a JSON-formatted program description like this:
 
-``` js
+``` json
 {
 	"program": "remove_gaps.py",
 	"name": "Gaps remover",
@@ -44,16 +44,14 @@ sidebar: false
 
 ### Pline will output a GUI like this:
 
-<div  class="plinedemo"></div>
+<div  class="demoUI"></div>
 
-The above interface represents a command-line script `remove_gaps.py` with two input arguments.
-Read from the [Pline guide](/guide/) for more details.
+This interface represents a command-line script `remove_gaps.py` with two input arguments.  
+[Pline documentation](/guide/) describes the process in more detail.
 
 ::: tip
-The above example is a live interface, try it out!
-Launching command-line programs is disabled here, but
-you can get full Pline packages from the [downloads page](/downloads/) or
-run integrated examples in the [Wasabi webapp](http://wasabiapp.org).
+The example above (and the one in the page header) is a live interface, try it out!  
+Running background tasks is disabled here. For that, use a standalone Pline package from the [downloads page](/downloads/) or run the examples in the [demo webapp](http://wasabiapp.org:8080).
 :::
 
 <div class="footer">
@@ -62,9 +60,20 @@ Andres Veidenberg |
 </div>
 
 <script>
-import NavLink from '@theme/components/NavLink.vue';
 
-let demoJSON = {
+const logoJSON = {
+  program: "pline",
+  URL: "http://wasabiapp.org/pline",
+	name: "Pline",
+  desc: "Automatic web interface generator",
+  submitBtn: "Run Pline",
+	options: [
+		{file: ""},
+		{group: "Pline options", options: []}
+	]
+};
+
+const demoJSON = {
 	program: "remove_gaps.py",
 	name: "Gaps remover",
 	desc: "Trims gaps-only sites from the input sequence alignment",
@@ -75,17 +84,26 @@ let demoJSON = {
 };
 
 export default {
-  components: { NavLink },
+  data: function(){
+    return {
+      logoPlugin: false,
+      demoPlugin: false
+    }
+  },
   computed: {
     fm(){
       return this.$page.frontmatter
     }
   },
-  mounted(){
-    $('.logo').removeClass('away');
+  beforeMount(){
     Pline.settings.pipelines = false;
-    let plugin = Pline.plugins.Pline || Pline.addPlugin(demoJSON);
-    plugin.draw('.plinedemo');
+    this.logoPlugin = Pline.addPlugin(logoJSON);
+    this.demoPlugin = Pline.addPlugin(demoJSON);
+  },
+  mounted(){
+    this.logoPlugin.draw('.logoUI')
+    $('.logo').removeClass('away');
+    this.demoPlugin.draw('.demoUI');
   }
 }
 </script>
