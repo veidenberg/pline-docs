@@ -1,20 +1,19 @@
 <template>
   <a :href="link" class="action-button" >
-    <img v-if="icon" class="icon" :src="icn"/> {{ text }}
+    <icn v-if="icon" :name="icon"/> {{ text }}
     <badge v-if="tag" :text="tag" type="tag" vertical="middle"/>
   </a>
 </template>
 
 <script>
-//import Badge from '@theme/global-components/Badge.vue';
 
 export default {
   name: 'Btn',
-  props: { link: String, icon: String, text: String, tag: String },
-  data: function(){
-    return {
-      icn: '/images/icon_'+this.icon+'.png'
-    }
+  props: {
+    link: String,
+    icon: String,
+    text: String,
+    tag: String
   }
 }
 </script>
@@ -34,8 +33,6 @@ export default {
   border-bottom: 1px solid darken($accentColor, 30%)
   &:hover
     background-color: darken($accentColor, 5%)
-  .icon
-    height: 1em
 .badge.tag
   background-color: #bbb !important
 </style>

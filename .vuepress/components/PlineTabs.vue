@@ -1,13 +1,13 @@
 <template>
 <div class="plugin-demo">
     <div class="plugin-header">
-        <h3 class="plugin-name">⚙️ {{ info.name }} </h3>
-        <p class="plugin-desc"> {{ desc }} </p>
+        <h3 class="title"><icn :name="icon"/> {{ info.name }} </h3>
+        <p class="desc"> {{ info.desc }} </p>
         <a v-if="info.url" :href="info.url"> {{ info.url }} <OutboundLink v-if="info.url"/></a>
     </div>
-    <btn :text="'📄 JSON'" :link="json_url" download/>
-    <btn v-if="!pipeline" :text="'Plugin'" :icon="os" v-on:click="$parent.makeZip('plugin', name)"/>
-    <btn :text="'Bundle'" :icon="os" v-on:click="$parent.makeZip('bundle', name)"/>
+    <btn :text="'JSON'" :link="json_url" icon="file" download/>
+    <btn v-if="!pipeline" :text="'Plugin'" :icon="os" :link="'/zip/'+name+'_'+os+'.zip'"/>
+    <btn :text="'Bundle'" :icon="os" :link="'/zip/pline_'+name+'_'+os+'.zip'"/>
     <div class="tabs">
         <div class="tabs-header">
             <span class="title" @click="activeTab = 0" :class="{active: activeTab === 0}"> Interface </span>
@@ -41,27 +41,20 @@ export default {
         default: 0
     },
     pipeline: Boolean,
-    os: {
-        type: String,
-        default: 'osx'
-    }
+    os: String
   },
   data: function(){
     return {
       activeTab : 0,
-      info: { name: this.name, url: '', desc: '' },
+      info: { name: this.name, url: '', desc: ''},
       timeout: this.index*1000,
-      jsonStr: ''
+      jsonStr: '',
+      icon: this.pipeline? 'gears' : 'plugin'
     }
   },
   computed: {
-    desc: function(){
-        var d = this.info.desc || this.info.description;
-        if(!d) return '';
-        return d.charAt(0).toUpperCase() + d.substring(1);
-    },
     json_url: function(){
-        const root = 'https://github.com/veidenberg/pline-plugins/raw/master/';
+        const root = 'https://cdn.jsdelivr.net/gh/veidenberg/pline-plugins/';
         if(this.pipeline) return root + 'pipelines/'+this.name+'/'+this.name+'.json';
         return root + this.name+'/plugin.json';
     }
@@ -69,11 +62,10 @@ export default {
   mounted: function() { //dynamically add highlighted json code
     const self = this;
     const UItab = self.$refs.gui.$el; //tab with interface
-    
-    setTimeout( function(){ //json
+    //fetch json
+    setTimeout( function(){
       $.get(self.json_url)
       .done(function(json){
-          console.log(json);
         UItab.innerText = '';
         Object.assign(self.info, json);
         self.jsonStr = JSON.stringify(json, null, 2);
@@ -84,7 +76,6 @@ export default {
         }
       })
       .fail(function(resp){ //obj string
-      console.log(resp.responseText);
         UItab.innerText = '';
         try {
             var obj = Function('"use strict"; return ('+ resp.responseText +')')();
@@ -114,17 +105,22 @@ export default {
     border-radius: 6px;
     margin: 20px 0
     padding: 10px
-    &:nth-child(2n)
+    &:nth-child(odd)
         background: lighten($textColor, 97%)
     a.action-button
         padding: 0.35rem 1rem
         margin: 20px 3px
     .plugin-header
-        h3
+        .title
             margin: 5px 0
-        p
+            .icon
+                height: 2rem
+                vertical-align: -0.5rem
+        .desc
             margin: 0
             color: lighten($textColor, 20%)
+        .desc:first-letter
+            text-transform: capitalize
     .tabs
         .tabs-header
             text-align: center
@@ -146,5 +142,4 @@ export default {
             border-width: 1px
             .tab.cut
                 border-bottom: 1px solid #333;
-        
 </style>
