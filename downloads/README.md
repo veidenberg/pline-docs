@@ -85,7 +85,7 @@ samtools view -n path/to/Pline/data/results.bam
 <script>
 export default {
   data: function(){
-    return {
+    return{
       plugins: [],
       pipelines: [],
       repo: 'https://api.github.com/repos/veidenberg',
@@ -94,7 +94,7 @@ export default {
       oslist: [
         {tag: 'osx', name: 'MacOS'},
         {tag: 'linux', name: 'Linux'}
-      ]
+      ] 
     }
   },
   computed: {
