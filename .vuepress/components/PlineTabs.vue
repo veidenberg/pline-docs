@@ -14,8 +14,8 @@
             <span class="title" @click="activeTab = 1" :class="{active: activeTab === 1}"> JSON </span>
         </div>  
         <div class="tabs-window">
-            <Tab ref="gui" :id="0">Loading the interface...</Tab>
-            <Tab ref="json" :id="1" :cut="true">
+            <Tab ref="gui" :i="0">Loading the interface...</Tab>
+            <Tab ref="json" :i="1" :cut="true">
                 <Code lang="json" :code="jsonStr"/>
             </Tab>
         </div>

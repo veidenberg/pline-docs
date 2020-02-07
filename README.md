@@ -5,7 +5,7 @@ sidebar: false
 ---
 
 <div class="header">
-  <div class="logo away">
+  <div :class="logoClass">
     <img :src="$withBase('/images/scrn_man.jpg')">
     <img :src="$withBase('/images/scrn_pline_json.jpg')">
     <div class="logoUI"></div>
@@ -14,7 +14,7 @@ sidebar: false
   <p class="description">JSON-based web interfaces for command-line programs</p>
   <p class="action">
 	  <btn text="Play video" icon="play" link="/" />
-    <btn text="Live demo →" link="http://wasabiapp.org/pline-demo/" />
+    <btn text="Live demo →︎" link="http://wasabiapp.org/pline-demo/" />
     <btn text="Guide →" link="/guide/" />
   </p>
 </div>
@@ -61,33 +61,32 @@ Andres Veidenberg |
 
 <script>
 
-const logoJSON = {
-  program: "pline",
-  URL: "http://wasabiapp.org/pline",
-	name: "Pline",
-  desc: "Automatic web interface generator",
-  submitBtn: "Run Pline",
-	options: [
-		{file: ""},
-		{group: "Pline options", options: []}
-	]
-};
-
-const demoJSON = {
-	program: "remove_gaps.py",
-	name: "Gaps remover",
-	desc: "Trims gaps-only sites from the input sequence alignment",
-	options: [
-		{file: "", required: "Input file missing!"},
-		{checkbox: "--count", title: "Count sequences"}
-	]
-};
-
 export default {
   data: function(){
     return {
       logoPlugin: false,
-      demoPlugin: false
+      demoPlugin: false,
+      logoJSON: {
+        program: "pline",
+        URL: "http://wasabiapp.org/pline",
+        name: "Pline",
+        desc: "Automatic web interface generator",
+        submitBtn: "Run Pline",
+        options: [
+          {file: ""},
+          {group: "Pline options", options: []}
+        ]
+      },
+      demoJSON: {
+        program: "remove_gaps.py",
+        name: "Gaps remover",
+        desc: "Trims gaps-only sites from the input sequence alignment",
+        options: [
+          {file: "", required: "Input file missing!"},
+          {checkbox: "--count", title: "Count sequences"}
+        ]
+      },
+      logoClass: {logo: true, away: true} 
     }
   },
   computed: {
@@ -96,13 +95,12 @@ export default {
     }
   },
   beforeMount(){
-    Pline.settings.pipelines = false;
-    this.logoPlugin = Pline.addPlugin(logoJSON);
-    this.demoPlugin = Pline.addPlugin(demoJSON);
+    this.logoPlugin = Pline.addPlugin(this.logoJSON);
+    this.demoPlugin = Pline.addPlugin(this.demoJSON);
   },
   mounted(){
     this.logoPlugin.draw('.logoUI')
-    $('.logo').removeClass('away');
+    this.logoClass.away = false;
     this.demoPlugin.draw('.demoUI');
   }
 }

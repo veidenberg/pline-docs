@@ -1,13 +1,13 @@
 ---
 title: Guide
-pageClass: repo
+pageClass: guide
 ---
 
 ## Introduction
 
 Pline (“Plugin interface language”) is a specification for describing command-line (CLI) programs and their interfaces, and its implementation as a lightweight web app. Pline generates interfaces from standardized descriptions, which allows users to create cross-platform GUIs without programming and to share or reuse existing interfaces. Pline has been designed for bioinformatics software, but a Pline interface can be written for any command-line executable.
 
-A Pline command-line program description specifies a program and its input parameters in [JSON](http://json.org) format. You can download example interfaces as Pline plugins from the [downloads page](./repo/) or write your own plugin JSON using the [Pline JSON API](/api/). 
+A Pline command-line program description specifies a program and its input parameters in [JSON](http://json.org) format. You can download example interfaces as Pline plugins from the [downloads page](/downloads/) or write your own plugin JSON using the [Pline JSON API](/api/). 
 
 ## Overview
 
@@ -47,19 +47,19 @@ Depending on the setup, the interface can control the executable on the local co
 
 ## Installation
 
-The [downloads page](/repo/#plugins) includes a Pline program bundle for a number of command-line programs.
+The [downloads page](/downloads/) includes a Pline program bundle for a number of command-line programs.
 The bundle can be used as a standalone web app or integrated to a website.
 
 ### Standalone desktop app
 
 - **Installation:**
-  + Download a Pline bundle from the [plugins list](/repo/#plugins)
+  + Download a Pline bundle from the [plugins list](/downloads/)
 - **Use:**
   + Launch the server module:
   ```sh
   python pline_server.py #in the Pline directory
   ```
-  This will open a web browser window with http://localhost:8000 to display the interface.
+  This will open a web browser window with `http://localhost:8000` to display the interface.
 
 ### Standalone Pline website
 
@@ -89,7 +89,7 @@ Pline can draw interfaces to an existing web page and send the program commands 
   //register a new program description
   let myPlugin = Pline.addPlugin('path/to/pluginFile.json');
   //draw the interface into a HTML element
-  myPlugin.draw('#InterfaceContainer');
+  myPlugin.draw('#container');
   ```
   + In the server:
   The server receives a program command together with any iniput files:
@@ -108,9 +108,9 @@ Pline can draw interfaces to an existing web page and send the program commands 
 ### Multiple interfaces
 
 Multiple program interfaces can be added to Pline:
-1. [Download](/repo/) plugin package(s)
+1. [Download](/downloads/) plugin package(s)
 > Plugin package includes interface JSON and the program binary
-2. Drop the plugins to Pline plugins directory
+2. Unzip to your Pline interfaces directory (by default Pline/plugins)
 > See the [Pline file structure](./#overview)
 2. Register the plugins
 ```js
@@ -121,9 +121,10 @@ Pline.addPlugin("path/to/plugin/plugin.json")
  This makes multiple program GUIs available in a single webapp. 
  The interfaces can be drawn e.g. side-by-side or to separate web pages.
  In addition, all of the registered interfaces can be easily chained to a graphical pipeline:
+ 
  <img src="./pline_pipeline.png" class="example">
- The buttons at the bottom of the interface allows to add new interfaces to the pipeline, store the pipeline to a JSON file and restore previous pipelines.
- Example pipelines are available in the [downloads page](/repo/#pipelines)
+
+ The buttons at the bottom allow to add program interfaces to the pipeline, export the pipeline to a JSON file and import stored pipelines. The example on the above image is available on the [downloads page](/downloads/).
 
 ## Advanced usage
 
@@ -132,17 +133,17 @@ Pline Javascript library exposes various settings and functions to modify the ap
 ### Interface settings
 
 `Pline.settings` object includes the adjustable global settings:
-``` json
+``` js
 settings: {
-	  sendmail: false, //enable email notifications (false|true|'pipelines'=only for pipelines)
-	  email: '', //predefined email address
-	  presets: true, //enable presets (stored plugin launch parameters)
-	  UIcontainer: 'body', //default container element for plugin interfaces (CSS selector | DOM element)
-	  pipelines: true, //enable pipelines (send multiple commands. false=show one plugin interface at a time)
-	  pipes: true, //enable pipes in pipelines/commands (set false on unsopperted systems e.g. Windows)
-	  sendAddress: '', //backend web server URL
-	  sendData: {}, //default POST data, sent with each job (object: {key:value,...})
-	  cleanup: false //follow-up action after job is sent (function | boolean (true=remove interface))
+    sendmail: false, //enable email notifications (false|true|'pipelines'=only for pipelines)
+    email: '', //predefined email address
+    presets: true, //enable presets (stored plugin launch parameters)
+    UIcontainer: 'body', //default container element for plugin interfaces (CSS selector | DOM element)
+    pipelines: true, //enable pipelines (send multiple commands. false=show one plugin interface at a time)
+    pipes: true, //enable pipes in pipelines/commands (set false on unsopperted systems e.g. Windows)
+    sendAddress: '', //backend web server URL
+    sendData: {}, //default POST data, sent with each job (object: {key:value,...})
+    cleanup: false //true = remove interface after job has been sent to server
 }
 ``` 
 

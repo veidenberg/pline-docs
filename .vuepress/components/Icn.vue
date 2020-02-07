@@ -8,7 +8,7 @@ export default {
   props: { name: String },
   computed: {
     path: function(){
-      return '/images/icon_'+this.name+'.png';
+      return this.$withBase('/images/icon_'+this.name+'.png');
     }
   }
 }
