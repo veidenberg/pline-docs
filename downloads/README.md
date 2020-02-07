@@ -12,7 +12,7 @@ In addition, each plugin here includes a live demo of the resulting interface.
 
 To start with, here is a button to download Pline with all of its plugins in a single package:  
 <btn :text="'Download for '+osname" :icon="os" :link="'/zip/pline_bundle_'+os+'.zip'"/>  
-This package results in a Pline webapp that you can see on the Pline [demo site](http://wasabiapp.org:8080).
+This package results in a Pline webapp that you can see on the Pline [demo site](http://wasabiapp.org/pline-demo/).
 
 ## Pline core
 

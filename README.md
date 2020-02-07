@@ -14,7 +14,7 @@ sidebar: false
   <p class="description">JSON-based web interfaces for command-line programs</p>
   <p class="action">
 	  <btn text="Play video" icon="play" link="/" />
-    <btn text="Live demo →" link="http://wasabiapp.org:8080" />
+    <btn text="Live demo →" link="http://wasabiapp.org/pline-demo/" />
     <btn text="Guide →" link="/guide/" />
   </p>
 </div>
@@ -51,7 +51,7 @@ This interface represents a command-line script `remove_gaps.py` with two input 
 
 ::: tip
 The example above (and the one in the page header) is a live interface, try it out!  
-Running background tasks is disabled here. For that, use a standalone Pline package from the [downloads page](/downloads/) or run the examples in the [demo webapp](http://wasabiapp.org:8080).
+Running background tasks is disabled here. For that, use a standalone Pline package from the [downloads page](/downloads/) or run the examples in the [demo webapp](http://wasabiapp.org/pline-demo/).
 :::
 
 <div class="footer">
