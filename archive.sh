@@ -10,8 +10,8 @@ destdir="$wrkdir/Pline_zip"
 echo "Copying..." #make 2 Pline copies
 echo "  from: $srcdir"
 echo "  to: $wrkdir"
-rsync -a --exclude=".*" --exclude="analyses" --exclude="docs" --exclude="downloads" --exclude="release" "$srcdir" "$wrkdir"
-rsync -a --exclude=".*" --exclude="analyses" --exclude="docs" --exclude="downloads" --exclude="release" "$srcdir" "$wrkdir/Pline"
+rsync -a --exclude=".*" --exclude="analyses" --exclude="docs" --exclude="downloads" "$srcdir" "$wrkdir"
+rsync -a --exclude=".*" --exclude="analyses" --exclude="docs" --exclude="downloads" "$srcdir" "$wrkdir/Pline"
 #2. Archive all plugins (with linux or osx binaries)
 echo "Zipping releases..."
 echo "  to: $destdir"
@@ -25,7 +25,7 @@ zip -r "$destdir/pline_bundle_osx.zip" Pline -x "*/linux/*" &> /dev/null
 zip -r "$destdir/pline_bundle_linux.zip" Pline -x "*/osx/*" &> /dev/null
 #archive single plugins
 echo "Zipping plugins..."
-pipeline="BWA_index BWA_MEM Samtools_view Samtools_sort Samtools_index"
+pipeline="bwa_index bwa_mem samtools_index samtools_sort samtools_view"
 for plugin in plugins/*/
 do
   plugin=$(basename "$plugin") #plugindir name
@@ -39,7 +39,7 @@ do
     zip -r "$destdir/${plugin}_linux.zip" "plugins/$plugin" -x "*/osx/*" &> /dev/null
     rm -rf "$wrkdir"/Pline/Pline/plugins/* #empty temp. container
     if [[ $pipeline =~ $plugin ]]; then #part of pipeline
-      cp "plugins/${plugin}" Pline/plugins #keep for later
+      cp -r "plugins/${plugin}" Pline/plugins #keep for later
     else
       mv "plugins/${plugin}" Pline/plugins
     fi
@@ -49,6 +49,7 @@ do
 done
 echo "Zipping pipeline..."
 rm -rf "$wrkdir/Pline/Pline" #remove temp. container
+cp "$srcdir/pline" "$wrkdir/Pline" #re-copy executable
 cd "$wrkdir"
 plname="read_mapping"
 zip -r "$destdir/pline_${plname}_osx.zip" Pline -x "*/linux/*" &> /dev/null

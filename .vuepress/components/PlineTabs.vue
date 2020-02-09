@@ -15,7 +15,7 @@
         </div>  
         <div class="tabs-window">
             <Tab ref="gui" :i="0">Loading the interface...</Tab>
-            <Tab ref="json" :i="1" :cut="true">
+            <Tab ref="json" :i="1" class="cut">
                 <Code lang="json" :code="jsonStr"/>
             </Tab>
         </div>
@@ -141,5 +141,6 @@ export default {
             border-top: solid #ddd
             border-width: 1px
             .tab.cut
-                border-bottom: 1px solid #333;
+                border-bottom: 1px solid #333
+                max-height: 300px
 </style>

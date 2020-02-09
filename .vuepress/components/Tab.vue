@@ -1,5 +1,5 @@
 <template>
-  <div :class="{tab: true, active: i === $parent.activeTab, cut: cut}" :style="{'margin-left':offset}">
+  <div :class="{tab: true, active: i === $parent.activeTab}" :style="{'margin-left':offset}">
       <slot></slot>
   </div>
 </template>
@@ -8,8 +8,7 @@
 export default {
   name: 'Tab',
   props: {
-    i: { type: Number, required: true },
-    cut: { type: Boolean, default: false}
+    i: { type: Number, required: true }
   },
   computed: {
     offset: function(){ //first tab moves the tabs row

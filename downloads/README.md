@@ -111,8 +111,11 @@ export default {
     //set OS name
     if(navigator.appVersion.startsWith("Linux")) self.os = 'linux';
     //fetch data from GitHub:
+    //get release info
+    let data = await fetch(self.repo+'/pline/releases/latest').then(resp => resp.json());
+    self.version = data.tag_name;
     //get plugin names
-    let data = await fetch(self.repo+'/pline-plugins/contents').then(resp => resp.json());
+    data = await fetch(self.repo+'/pline-plugins/contents').then(resp => resp.json());
     data.forEach( function(item){
       if(item.type == 'dir' && item.name != 'pipelines') self.plugins.push(item.name);
     });
@@ -121,9 +124,6 @@ export default {
     data.forEach( function(item){
       if(item.type == 'dir') self.pipelines.push(item.name);
     });
-    //get release info
-    data = await fetch(self.repo+'/pline/releases/latest').then(resp => resp.json());
-    self.version = data.tag_name;
   }
 }
 </script>

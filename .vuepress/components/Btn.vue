@@ -1,5 +1,5 @@
 <template>
-  <a :href="link" class="action-button" >
+  <a :href="path" class="action-button" >
     <icn v-if="icon" :name="icon"/> {{ text }}
     <badge v-if="tag" :text="tag" type="tag" vertical="middle"/>
   </a>
@@ -14,7 +14,12 @@ export default {
     icon: String,
     text: String,
     tag: String
-  }
+  },
+  computed: {
+    path: function(){
+      return this.link.startsWith('/')? this.$withBase(this.link) : this.link;
+    }
+  },
 }
 </script>
 
