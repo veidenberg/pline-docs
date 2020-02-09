@@ -15,7 +15,7 @@ sidebar: false
   <p class="action">
 	  <btn text="Play video" icon="play" link="/" />
     <btn text="Live demo →︎" link="http://wasabiapp.org/pline-demo/" />
-    <btn text="Guide →" link="/guide/" />
+    <btn text="Get started →" link="/guide/" />
   </p>
 </div>
 

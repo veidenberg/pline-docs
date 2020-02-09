@@ -7,7 +7,24 @@ pageClass: guide
 
 Pline (“Plugin interface language”) is a specification for describing command-line (CLI) programs and their interfaces, and its implementation as a lightweight web app. Pline generates interfaces from standardized descriptions, which allows users to create cross-platform GUIs without programming and to share or reuse existing interfaces. Pline has been designed for bioinformatics software, but a Pline interface can be written for any command-line executable.
 
-A Pline command-line program description specifies a program and its input parameters in [JSON](http://json.org) format. You can download example interfaces as Pline plugins from the [downloads page](/downloads/) or write your own plugin JSON using the [Pline JSON API](/api/). 
+A Pline command-line program description specifies a program and its input parameters in [JSON](http://json.org) format. You can download example interfaces as Pline plugins from the [downloads page](/downloads/) or write your own plugin JSON using the [Pline JSON API](/api/).
+
+<div v-if="os">
+    <h2>Quick start</h2>
+    <ol>
+        <li><a :href="$withBase('/zip/pline_read_mapping_'+os+'.zip')">Download</a> the example pipeline.</li>
+        <li>Unzip and double-click the <code>pline</code> executable.</li>
+    </ol>
+    <div v-if="os=='osx'" class="custom-block tip">
+        <p class="custom-block-title">MacOS Gatekeeper</p>
+        <p>If you get "App can't be opened" error while opening <code>pline</code>:
+        <ul> 
+            <li> <a href="http://osxdaily.com/2016/09/27/allow-apps-from-anywhere-macos-gatekeeper/" target="_blank">allow all apps</a> in System Preferences, or</li>
+            <li> use <code>python pline_server.py</code> command</li>
+        </ul>
+        </p>
+    </div>
+</div>
 
 ## Overview
 
@@ -158,3 +175,15 @@ Extension functions can be added via `Pline.extend(Name, Function)` with the fol
 | registerPlugin | plugin import | Add the plugin instance launcher to the web page | None. `this` refers to the plugin instance. |
 | processOption | parsing a program option | Implement custom JSON API | JSON `Object` for a single program option |
 | processPayload | constructing the program command | Send metadata to the server | Input: the payload `Object` being sent to the server |
+
+<script>
+export default {
+  data: function(){
+    return { os: '' }
+  },
+  mounted(){
+    if(navigator.appVersion.includes("Linux")) this.os = 'linux';
+    else if(navigator.appVersion.includes("Mac")) this.os = 'osx';
+  }
+}
+</script>

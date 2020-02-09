@@ -109,7 +109,7 @@ export default {
   async beforeMount(){
     const self = this;
     //set OS name
-    if(navigator.appVersion.startsWith("Linux")) self.os = 'linux';
+    if(navigator.appVersion.includes("Linux")) self.os = 'linux';
     //fetch data from GitHub:
     //get release info
     let data = await fetch(self.repo+'/pline/releases/latest').then(resp => resp.json());
