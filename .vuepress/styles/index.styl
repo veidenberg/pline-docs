@@ -87,7 +87,7 @@
         height: 1.2rem
         vertical-align: -0.2rem
         
-  .features
+  /*.features
     border-top: 1px solid $borderColor
     padding: 1.2rem 0
     margin-top: 2.5rem
@@ -107,9 +107,14 @@
         padding-bottom: 0
         color: lighten($textColor, 10%)
       p
-        color: lighten($textColor, 25%) 
+        color: lighten($textColor, 25%)*/
+  
+  .demoUI
+    margin: 20px auto
+  
   .footer
-    padding: 2rem
+    margin-top: 60px
+    padding: 1rem
     border-top: 1px solid $borderColor
     text-align: center
     color: lighten($textColor, 25%)
@@ -159,3 +164,7 @@
   .pline
     .pl-btndiv
       display: none
+
+//add prismjs languages
+div[class~=language-shell]:before
+  content:"shell"

@@ -2,7 +2,7 @@
 
 #Makes Pline zipball bundles for the downloads page
 #1. Prepare source files
-srcdir=~/Desktop/Pline
+srcdir=~/Desktop/pline/Pline
 wrkdir=~/Downloads
 [[ -d $srcdir && -d $wrkdir ]] || { echo "Error: check dirnames"; exit 1; }
 destdir="$wrkdir/Pline_zip"

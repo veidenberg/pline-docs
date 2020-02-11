@@ -16,7 +16,7 @@
         <div class="tabs-window">
             <Tab ref="gui" :i="0">Loading the interface...</Tab>
             <Tab ref="json" :i="1" class="cut">
-                <Code lang="json" :code="jsonStr"/>
+                <Code lang="json" :code="jsonStr"></Code>
             </Tab>
         </div>
     </div>

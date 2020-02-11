@@ -42,17 +42,21 @@ sidebar: false
 }
 ```
 
-### Pline will output a GUI like this:
+### Pline will output a GUI like this:  
 
 <div  class="demoUI"></div>
 
-This interface represents a command-line script `remove_gaps.py` with two input arguments.  
-[Pline documentation](/guide/) describes the process in more detail.
+<div v-if="command">
+  <h3>Producing a command like this:</h3>
+  <Code lang="shell" :code="command"></Code>
+</div>
 
-::: tip
-The example above (and the one in the page header) is a live interface, try it out!  
-Running background tasks is disabled here. For that, use a standalone Pline package from the [downloads page](/downloads/) or run the examples in the [demo webapp](http://wasabiapp.org/pline-demo/).
-:::
+This example interface represents a command-line script `remove_gaps.py` with two input arguments.
+Go on - fill the inputs, click the big orange button and see what happens.
+<p v-if="command">
+  Next, head over to <a href="http://wasabiapp.org/pline-demo/">demo webapp</a> to run some real-life programs 
+  and pipelines. In addition, you can <a :href="$withBase('/downloads/')">download</a> and run standalone Pline on your computer or create custom interfaces with <a :href="$withBase('/guide/api')">JSON API</a>.
+</p>
 
 <div class="footer">
 Andres Veidenberg | 
@@ -86,17 +90,31 @@ export default {
           {checkbox: "--count", title: "Count sequences"}
         ]
       },
-      logoClass: {logo: true, away: true} 
+      logoClass: {logo: true, away: true},
+      pipeline: []
     }
   },
   computed: {
     fm(){
       return this.$page.frontmatter
+    },
+    command(){ //demoUI submitted data => command string
+      let cmd = "";
+      this.pipeline.forEach(function(job){
+        cmd += job.program+" "+job.parameters+"\n";
+      });
+      return cmd;
     }
   },
   beforeMount(){
-    this.logoPlugin = Pline.addPlugin(this.logoJSON);
-    this.demoPlugin = Pline.addPlugin(this.demoJSON);
+    const self = this;
+    self.logoPlugin = Pline.addPlugin(self.logoJSON);
+    self.demoPlugin = Pline.addPlugin(self.demoJSON);
+    Pline.extend({
+      processJob: function(data){
+        self.pipeline = data.pipeline;
+      }
+    });
   },
   mounted(){
     this.logoPlugin.draw('.logoUI')
