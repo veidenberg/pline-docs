@@ -4,11 +4,11 @@
   "description": "Pline documentation",
   "homepage": "http://wasabiapp.org/pline",
   "bugs": {
-    "url": "https://github.com/veidenbe/pline/issues"
+    "url": "https://github.com/veidenberg/pline/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/veidenbe/pline.git"
+    "url": "https://github.com/veidenberg/pline.git"
   },
   "author": "Andres Veidenberg",
   "license": "MIT",
