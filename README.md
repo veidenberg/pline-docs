@@ -1,4 +1,4 @@
-# Source files for Pline [documentation website](http://wasabiapp.org/pline/)
+# Source files for [Pline website](http://wasabiapp.org/pline/)
 
 Uses Vuepress static site generator and reactive Vue components.
 
@@ -13,7 +13,7 @@ Default directories can be changed by editing the symlinks in `.vuepress/public`
 
 ## Development
 
-1. Edit the source files: markup/HTML in `*.md` files and Vue components in `.vuepress/components`.  
+1. Edit the source files: markup/HTML in `*.md` files and Vue components in `.vuepress/components`
 2. Run `vuepress dev` in the root directory to preview the site.
 
 ## Deployment
