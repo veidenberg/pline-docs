@@ -29,6 +29,20 @@
       width: 80%
       margin: 0 auto
       margin-bottom: 60px
+      .video
+        opacity: 0
+        z-index: -1
+        position: absolute
+        top: -40px
+        left: -20%
+        height: 220%
+        width: 140%
+        box-shadow: 0 3px 10px #999
+        border-radius: 3px
+        transition: opacity 0.5s
+        &.visible
+          z-index: 2
+          opacity: 1
       img, .logoUI
         display: block
         position: absolute

@@ -1,5 +1,5 @@
 <template>
-  <a :href="path" class="action-button" >
+  <a :href="path" class="action-button" v-on="click? {click: runClick} : {}">
     <icn v-if="icon" :name="icon"/> {{ text }}
     <badge v-if="tag" :text="tag" type="tag" vertical="middle"/>
   </a>
@@ -10,13 +10,20 @@
 export default {
   name: 'Btn',
   props: {
-    link: String,
+    link: { type: String, default: '' },
+    click: Function,
     icon: String,
     text: String,
     tag: String
   },
+  methods: {
+    runClick: function(event){
+      event.preventDefault(); //run custom click handler
+      if(typeof(this.click) == 'function') this.click(); 
+    }
+  },
   computed: {
-    path: function(){
+    path: function(){ //add site root
       return this.link.startsWith('/')? this.$withBase(this.link) : this.link;
     }
   },

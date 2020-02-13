@@ -5,15 +5,17 @@ sidebar: false
 ---
 
 <div class="header">
-  <div :class="logoClass">
+  <div class="logo" :class="{away: !ready}">
     <img :src="$withBase('/images/scrn_man.jpg')">
     <img :src="$withBase('/images/scrn_pline_json.jpg')">
     <div class="logoUI"></div>
+    <iframe class="video" :class="{visible: show}" src="https://player.vimeo.com/video/391192911?color=ffa500" 
+    frameborder="0" allow="fullscreen" allowfullscreen title="Pline intro"></iframe>
   </div>
   <h1 id="main-title">Pline</h1>
   <p class="description">JSON-based web interfaces for command-line programs</p>
   <p class="action">
-	  <btn text="Play video" icon="play" link="/" />
+	  <btn text="Play video" icon="play" :click="showVideo" />
     <btn text="Live demo →︎" link="http://wasabiapp.org/pline-demo/" />
     <btn text="Get started →" link="/guide/" />
   </p>
@@ -37,7 +39,8 @@ sidebar: false
 	"desc": "Trims gaps-only sites from the input sequence alignment",
 	"options": [
 		{"file": "", "required": "Input file missing!"},
-		{"checkbox": "--count", "title": "Count sequences"}
+		{"bool": "--count", "title": "Count sequences"},
+		{"text": "--out", "title": "", "default": "output filename"}
 	]
 }
 ```
@@ -65,60 +68,68 @@ Andres Veidenberg |
 
 <script>
 
+const logoJSON = {
+  program: "pline",
+  URL: "http://wasabiapp.org/pline",
+  name: "Pline",
+  desc: "Automatic web interface generator",
+  submitBtn: "Run Pline",
+  options: [
+    {file: ""},
+    {group: "Pline options", options: []}
+  ]
+};
+const demoJSON = {
+  program: "remove_gaps.py",
+  name: "Gaps remover",
+  desc: "Trims gaps-only sites from the input sequence alignment",
+  options: [
+    {file: "", required: "Input file missing!"},
+    {bool: "--count", title: "Count sequences"},
+    {text: "--out", title: "", default: "output filename"}
+  ]
+};
+
 export default {
   data: function(){
     return {
       logoPlugin: false,
       demoPlugin: false,
-      logoJSON: {
-        program: "pline",
-        URL: "http://wasabiapp.org/pline",
-        name: "Pline",
-        desc: "Automatic web interface generator",
-        submitBtn: "Run Pline",
-        options: [
-          {file: ""},
-          {group: "Pline options", options: []}
-        ]
-      },
-      demoJSON: {
-        program: "remove_gaps.py",
-        name: "Gaps remover",
-        desc: "Trims gaps-only sites from the input sequence alignment",
-        options: [
-          {file: "", required: "Input file missing!"},
-          {checkbox: "--count", title: "Count sequences"}
-        ]
-      },
-      logoClass: {logo: true, away: true},
+      ready: false,
+      show: false,
       pipeline: []
+    }
+  },
+  methods:{
+    showVideo: function(){
+      this.ready = false;
+      this.show = true;
     }
   },
   computed: {
     fm(){
       return this.$page.frontmatter
     },
-    command(){ //demoUI submitted data => command string
-      let cmd = "";
+    command(){
+      let cmd = ""; //extract submitted command
       this.pipeline.forEach(function(job){
         cmd += job.program+" "+job.parameters+"\n";
       });
       return cmd;
     }
   },
-  beforeMount(){
-    const self = this;
-    self.logoPlugin = Pline.addPlugin(self.logoJSON);
-    self.demoPlugin = Pline.addPlugin(self.demoJSON);
-    Pline.extend({
+  beforeMount(){ //register plugins
+    this.logoPlugin = Pline.addPlugin(logoJSON);
+    this.demoPlugin = Pline.addPlugin(demoJSON);
+    Pline.extend({ //capture submitted data
       processJob: function(data){
-        self.pipeline = data.pipeline;
-      }
+        this.pipeline = data.pipeline;
+      }.bind(this)
     });
   },
-  mounted(){
+  mounted(){ //reveal logo, draw plugins
     this.logoPlugin.draw('.logoUI')
-    this.logoClass.away = false;
+    this.ready = true;
     this.demoPlugin.draw('.demoUI');
   }
 }
